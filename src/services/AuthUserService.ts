@@ -55,7 +55,7 @@ class AuthUserService {
     if (!user) {
       user = await new UserModel({ login, id, avatar_url, name }).save();
     }
-    console.log(user);
+    
     const token = sign(
       {
         user: {
