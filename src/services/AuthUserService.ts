@@ -1,5 +1,5 @@
 import axios from "axios";
-import prismaClient from "../prisma";
+import { User } from "../models/UserModel";
 import { sign } from "jsonwebtoken";
 
 /**
@@ -50,21 +50,10 @@ class AuthUserService {
 
     const { login, id, avatar_url, name } = response.data;
 
-    const user = await prismaClient.user.findFirst({
-      where: {
-        github_id: id,
-      },
-    });
+    let user = await User.findOne({ id });
 
     if (!user) {
-      await prismaClient.user.create({
-        data: {
-          github_id: id,
-          login,
-          avatar_url,
-          name,
-        },
-      });
+      user = await new User({ login, id, avatar_url, name }).save();
     }
 
     const token = sign(
@@ -77,7 +66,7 @@ class AuthUserService {
       },
       process.env.JWT_SECRET,
       {
-        subject: user.id,
+        subject: user._id,
         expiresIn: "1d",
       }
     );

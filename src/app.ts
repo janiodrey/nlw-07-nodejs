@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import mongoose from "mongoose";
 import http from "http";
 import cors from "cors";
 import { Server } from "socket.io";
@@ -7,6 +8,10 @@ import { Server } from "socket.io";
 import { router } from "./routes";
 
 const app = express();
+
+mongoose.connect(process.env.DB_URL).then(() => {
+  console.log("Database connected successfully");
+});
 
 app.use(cors());
 
