@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../models/UserModel";
+import { UserModel } from "../models/UserModel";
 import { sign } from "jsonwebtoken";
 
 /**
@@ -50,12 +50,12 @@ class AuthUserService {
 
     const { login, id, avatar_url, name } = response.data;
 
-    let user = await User.findOne({ id });
+    let user = await UserModel.findOne({ id });
 
     if (!user) {
-      user = await new User({ login, id, avatar_url, name }).save();
+      user = await new UserModel({ login, id, avatar_url, name }).save();
     }
-
+    console.log(user);
     const token = sign(
       {
         user: {
@@ -66,7 +66,7 @@ class AuthUserService {
       },
       process.env.JWT_SECRET,
       {
-        subject: user._id,
+        subject: user._id.toString(),
         expiresIn: "1d",
       }
     );
