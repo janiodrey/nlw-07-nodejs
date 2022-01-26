@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema({
   text: String,
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
   created_at: {
     type: Date,
     default: Date.now(),
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
 });
 
